@@ -2,20 +2,19 @@ import java.math.BigDecimal;
 
 public class Product
 {
+	private static int count = 0;
 	private final String ID;
 	private String brand;
 	private String name;
 	private BigDecimal unitPrice;
 	private BigDecimal discount = new BigDecimal("0");
-	private static int count = 0;
 
-	public Product(String id, String brand, String name, BigDecimal unitPrice, BigDecimal discount) {
-		ID = id;
+	public Product(String brand, String name, BigDecimal unitPrice, BigDecimal discount) {
+		ID = "Product#" + ++count;
 		this.brand = brand;
 		this.name = name;
 		this.unitPrice = unitPrice;
 		this.discount = discount;
-		count++;
 	}
 
 	public String getID() {
@@ -52,10 +51,6 @@ public class Product
 
 	public BigDecimal getDiscount() {
 		return(discount);
-	}
-
-	public int getCount() {
-		return(count);
 	}
 
 	public BigDecimal getDiscountedPrice() {

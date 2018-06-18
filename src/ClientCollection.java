@@ -18,8 +18,8 @@ public class ClientCollection
 		return(_cc);
 	}
 
-	public void  addClient(String id, Person p) {
-		clients.putIfAbsent(id, p);
+	public void  addClient(Client p) {
+		clients.putIfAbsent(p.getID(), p);
 	}
 
 	public Person getClientByID(String id) {
@@ -30,7 +30,7 @@ public class ClientCollection
 		clients.remove(p);
 	}
 
-	public int  getNumberOfClients() {
+	public int getNumberOfClients() {
 		return(clients.size());
 	}
 

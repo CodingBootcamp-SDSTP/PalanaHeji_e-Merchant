@@ -1,13 +1,21 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.math.BigDecimal;
 
 public class Client extends Person
 {
+	private static int count = 0;
 	private final String ID;
 	private String email;
+	private String password;
 	private String companyName;
-	private ArrayList<String> cart;
 	private String invoiceID;
+	private String city;
+	private String state;
+	private String zipcode;
+	private String country;
+	private String address;
+	private Cart cart;
 
 	public Client(String fn, String ln, int a) {
 		setFirstName(fn);
@@ -15,22 +23,34 @@ public class Client extends Person
 		setAge(a);
 		email = "";
 		companyName = "";
+		city = "";
+		state = "";
+		zipcode =  "";
+		country = "";
+		address = "";
 		invoiceID = "";
-		ID = "";
-		cart = new ArrayList<String>();
+		ID = "ClientID#" + ++count;
+		cart = new Cart();
 	}
 
-	public Client(String firstName, String lastName, int age, String email, String companyName, String ID) {
+	public Client(String firstName, String lastName, int age, String email,
+	String password, String companyName, String city, String state,
+	String zipcode, String country, String address) {
 		setFirstName(firstName);
 		setLastName(lastName);
 		setAge(age);
-		this.email = email;
+		setEmail(email);
+		this.password = password;
 		this.companyName = companyName;
+		this.city = city;
+		this.state = state;
+		this.zipcode =  zipcode;
+		this.country = country;
+		this.address = address;
 		invoiceID = "";
-		this.ID = ID;
-		cart = new ArrayList<String>();
+		ID = "ClientID#" + ++count;
+		cart = new Cart();
 	}
-
 
 	public String getID() {
 		return(ID);
@@ -38,6 +58,10 @@ public class Client extends Person
 
 	public void setEmail(String e) {
 		email = e;
+	}
+
+	public void setPassword(String p) {
+		password = p;
 	}
 
 	public void setCompanyName(String c) {
@@ -52,6 +76,10 @@ public class Client extends Person
 		return(email);
 	}
 
+	public String getPassword() {
+		return(password);
+	}
+
 	public String getCompanyName() {
 		return(companyName);
 	}
@@ -60,25 +88,47 @@ public class Client extends Person
 		return(invoiceID);
 	}
 
-	public void addOrderItem(String productID) {
-		cart.add(productID);
+	public void setCity(String c) {
+		city = c;
 	}
 
-	public void removeOrderItemByProductID(String productID) {
-		for(String i : cart) {
-			cart.remove(productID);
-		}
+	public String getCity() {
+		return(city);
 	}
 
-	public void removeOrderItemByIndex(int i) {
-		cart.remove(i);
+	public void setState(String s) {
+		state = s;
 	}
 
-	public void clearCart() {
-		cart = null;
+	public String getState() {
+		return(state);
 	}
 
-	public ArrayList<String> getCart() {
+	public void setZipcode(String z) {
+		zipcode = z;
+	}
+
+	public String getZipcode() {
+		return(zipcode);
+	}
+
+	public void setCountry(String c) {
+		country = c;
+	}
+
+	public String getCountry() {
+		return(country);
+	}
+
+	public void setAddress(String a) {
+		address = a;
+	}
+
+	public String getAddress() {
+		return(address);
+	}
+
+	public Cart getCart() {
 		return(cart);
 	}
 
@@ -89,7 +139,12 @@ public class Client extends Person
 		sb.append("~" + email);
 		sb.append("~" + companyName);
 		sb.append("~" + invoiceID);
-		sb.append("~" +  cart);
+		sb.append("~" + city);
+		sb.append("~" + state);
+		sb.append("~" + zipcode);
+		sb.append("~" + country);
+		sb.append("~" + address);
+		sb.append("~" +  cart.getDetails());
 		return(sb.toString());
 	}
 }

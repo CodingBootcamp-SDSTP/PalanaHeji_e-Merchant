@@ -19,8 +19,8 @@ public class ProductCollection
 		return(_pc);
 	}
 
-	public void  addProduct(String id, Product p) {
-		products.putIfAbsent(id, p);
+	public void  addProduct(Product p) {
+		products.putIfAbsent(p.getID(), p);
 	}
 
 	public Product getProductByID(String id) {

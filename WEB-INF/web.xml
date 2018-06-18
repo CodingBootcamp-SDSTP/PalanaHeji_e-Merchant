@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<web-app>
+	<display-name>Merchant</display-name>
+	<description>E-Commerce Website</description>
+	<servlet>
+		<servlet-name>Homepage</servlet-name>
+		<servlet-class>HomeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Homepage</servlet-name>
+		<url-pattern>/hello</url-pattern>
+	</servlet-mapping>
+</web-app>

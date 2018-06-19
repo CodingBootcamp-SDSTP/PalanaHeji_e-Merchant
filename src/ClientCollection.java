@@ -3,19 +3,18 @@ import java.util.ArrayList;
 
 public class ClientCollection
 {
-	private static ClientCollection _cc = null;
+	private static ClientCollection _instance = null;
 	private HashMap<String, Person> clients;
-	private ArrayList<Person> arrayListOfClients = null;
 
 	private ClientCollection() {
 		clients = new HashMap<String, Person>();
 	}
 
 	public static ClientCollection createInstance() {
-		if(_cc == null) {
-			_cc = new ClientCollection();
+		if(_instance == null) {
+			_instance = new ClientCollection();
 		}
-		return(_cc);
+		return(_instance);
 	}
 
 	public void  addClient(Client p) {
@@ -39,10 +38,7 @@ public class ClientCollection
 	}
 
 	public ArrayList<Person> getArrayListOfClients() {
-		if(arrayListOfClients == null) {
-			arrayListOfClients = new ArrayList<Person>(clients.values());
-		}
-		return(arrayListOfClients);
+		return(new ArrayList<Person>(clients.values()));
 	}
 
 	public ArrayList<Person> searchClient(String q) {

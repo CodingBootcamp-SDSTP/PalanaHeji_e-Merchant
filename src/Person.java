@@ -1,4 +1,4 @@
-public class Person
+public class Person implements DetailProvider
 {
 	private String firstName;
 	private String lastName;

@@ -1,39 +1,40 @@
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Invoice
+public class Invoice implements DetailProvider
 {
 	private static int count =0;
 	private final String ID;
 	private String customerID;
 	private final String transcationDate;
+	private final String dateOfPayment;
 	private BigDecimal totalBill;
 	private String destinationCity;
 	private String destinationState;
 	private String destinationZipcode;
 	private String destinationCountry;
 	private String destinationAddress;
-	private Date transactionDate;
 	private String cartDetails;
-	private Client client = null;
-	private String dateOfPayment = null;
+	private BigDecimal shippingCost;
+	private boolean isPaid = false;
 
 	public Invoice(String clientId, String total, String address, String zipcode,
-	String city, String country, String state, String cartDetails) {
+	String city, String country, String state, String cartDetails, String datePaid, String shipCost) {
+		ID = "PifabsInvoice#" + ++count;
 		customerID = clientId;
 		totalBill = new BigDecimal(total);
-		destinationAddress = address;
+		shippingCost = new BigDecimal(shipCost);
 		destinationZipcode = zipcode;
 		destinationCity = city;
 		destinationCountry = country;
 		destinationState = state;
 		this.cartDetails = cartDetails;
-		ID = "PifabsInvoice#" + ++count;
 		transcationDate = new Date().toString();
-		dateOfPayment = null;
+		dateOfPayment = datePaid;
+		destinationAddress = address;
 	}
 
-	public Invoice(Client c) {
+	public Invoice(Client c, String datePaid) {
 		ID = "PifabsInvoice#" + ++count;
 		customerID = c.getID();
 		totalBill = c.getCart().getTotalBill();
@@ -42,10 +43,13 @@ public class Invoice
 		destinationCity = c.getCity();
 		destinationCountry = c.getCountry();
 		transcationDate = new Date().toString();
-		dateOfPayment = null;
+		dateOfPayment = datePaid;
+		cartDetails = c.getCart().getDetails();
+		shippingCost =  c.getCart().getShippingCost();
+		totalBill =  c.getCart().getTotalBill();
 	}
 
-	public String getInvoiceID() {
+	public String getID() {
 		return(ID);
 	}
 
@@ -94,7 +98,7 @@ public class Invoice
 	}
 
 	public void setDestinationCountry(String c) {
-		destinationCountry = country;
+		destinationCountry = c;
 	}
 
 	public String getDestinationCountry() {
@@ -106,6 +110,22 @@ public class Invoice
 	}
 
 	public String getCartDetails() {
-		return(client.getCart().getDetails());
+		return(cartDetails);
+	}
+
+	public String getDetails() {
+		StringBuilder sb = new StringBuilder("INVOICE ID : " + ID);
+			sb.append("\nfrom invoice CLIENT ID : " + customerID);
+			sb.append("\nDATE PURCHASED : " + transcationDate);
+			sb.append("\nDATE PAID : " + dateOfPayment);
+			sb.append("\nCITY : " + destinationCity);
+			sb.append("\nSTATE : " + destinationState);
+			sb.append("\nZIPCODE : " + destinationZipcode);
+			sb.append("\nCOUNTRY : " + destinationCountry);
+			sb.append("\nADDRESS : " + destinationAddress);
+			sb.append("\nORDERS : " + cartDetails);
+			sb.append("\nSHIPPING COST : " + shippingCost.toString());
+			sb.append("\nTOTAL BILL : " + totalBill.toString());
+		return(sb.toString());
 	}
 }

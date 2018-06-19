@@ -1,21 +1,19 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.math.BigDecimal;
+import java.util.Date;
 
-public class Cart
+public class Cart implements DetailProvider
 {
-	private static String ID;
 	private int count = 0;
+	private static String ID;
 	private ArrayList<Product> cart;
-	private int cartSize;
-	private String  details;
-	private BigDecimal totalAmount = new BigDecimal("0");
-	private ArrayList<String> itemNames;
-	private String clientID;
-	private boolean isPaid = false;
+	private BigDecimal totalAmount;
+	private BigDecimal shippingCost;
+	private boolean isCartPaid = false;
 
 	public Cart() {
-		ID = "Cart#" + count++;
+		ID = "Cart#" + ++count;
 		cart = new ArrayList<Product>();
 	}
 
@@ -49,18 +47,24 @@ public class Cart
 		cart.remove(i);
 	}
 
+	public void setShippingCost(String sc) {
+		shippingCost = new BigDecimal(sc);
+	}
+
+	public BigDecimal getShippingCost() {
+		return(shippingCost);
+	}
+
 	public int getCartSize() {
 		return(cart.size());
 	}
 
-	public void isPaid(boolean t) {
-		isPaid = t;
+	public boolean checkOutCart() {
+		return(isCartPaid = true);
 	}
 
 	public void emptyCart() {
-		if(isPaid) {
-			cart.clear();
-		}
+		cart.clear();
 	}
 
 	public ArrayList<Product> getCart() {
@@ -68,22 +72,31 @@ public class Cart
 	}
 
 	public BigDecimal getTotalBill() {
-		BigDecimal total = new BigDecimal("0");
+		totalAmount = new BigDecimal("0");
 		for(Product p : cart) {
-			total = total.add(p.getDiscountedPrice());
+			totalAmount = totalAmount.add(p.getVatInclusivePrice());
 		}
-		return(total);
+		totalAmount = totalAmount.add(shippingCost);
+		return(totalAmount);
+	}
+
+	public Invoice createInvoice(Client c, String date) {
+		Invoice invoice = null;
+		if(isCartPaid) {
+			invoice = new Invoice(c, date);
+		}
+		return(invoice);
 	}
 
 	public String getDetails() {
 		StringBuilder sb = new StringBuilder();
 		for(Product  p  : cart) {
-			sb.append("~" + p.getID());
-			sb.append("~" + p.getBrand());
-			sb.append("~" + p.getName());
-			sb.append("~" + p.getunitPrice());
-			sb.append("~" + p.getDiscount());
-			sb.append("~" + getTotalBill());
+			sb.append("\nPRODUCT ID: " + p.getID());
+			sb.append("\nBRAND : " + p.getBrand());
+			sb.append("\nNAME : " + p.getName());
+			sb.append("\nUNIT PRICE : " + p.getunitPrice());
+			sb.append("\nDISCOUNT : " + p.getDiscount());
+			sb.append("\nVAT INCLUSIVE PRICE : " + p.getVatInclusivePrice());
 		}
 		return(sb.toString());
 	}

@@ -2,44 +2,56 @@ import java.util.ArrayList;
 
 public class StoreManager
 {
-	private static StoreManager _sm;
-	private ProductCollection pc = null;
-	private ClientCollection cc = null;
+	private static StoreManager _instance;
+	private ProductCollection productCollection = null;
+	private ClientCollection clientCollection = null;
+	private InvoiceCollection ic = null;
 
 	private StoreManager() {
-		pc = ProductCollection.createInstance();
-		cc = ClientCollection.createInstance();
+		productCollection = ProductCollection.createInstance();
+		clientCollection = ClientCollection.createInstance();
+		ic = InvoiceCollection.createInstance();
 	}
 
 	public static StoreManager createInstance() {
-		if(_sm == null) {
-			_sm = new StoreManager();
+		if(_instance == null) {
+			_instance = new StoreManager();
 		}
-		return(_sm);
+		return(_instance);
 	}
 
 	public ProductCollection getProductCollection() {
-		return(pc);
+		return(productCollection);
 	}
 
 	public ClientCollection getClientCollection() {
-		return(cc);
+		return(clientCollection);
+	}
+
+	public InvoiceCollection getInvoiceCollection() {
+		return(ic);
 	}
 
 	public Product getProductByID(String id) {
-		return(pc.getProductByID(id));
+		return(productCollection.getProductByID(id));
 	}
 
 	public Person getClientByID(String id) {
-		return(cc.getClientByID(id));
+		return(clientCollection.getClientByID(id));
+	}
+
+	public Invoice getInvoiceByID(String id) {
+		return(ic.getInvoiceByID(id));
 	}
 
 	public ArrayList<Object> search(String s) {
 		ArrayList<Object> ao = new ArrayList<Object>();
-		ArrayList<Person> cs = cc.searchClient(s);
-		ArrayList<Product> ps = pc.searchProduct(s);
+		ArrayList<Person> cs = clientCollection.searchClient(s);
+		ArrayList<Product> ps = productCollection.searchProduct(s);
+		ArrayList<Invoice> is = ic.searchInvoice(s);
 		ao.addAll(cs);
 		ao.addAll(ps);
+		ao.addAll(is);
 		return(ao);
 	}
 }

@@ -1,20 +1,25 @@
 import java.math.BigDecimal;
+import java.math.MathContext;
 
-public class Product
+public class Product implements DetailProvider
 {
 	private static int count = 0;
 	private final String ID;
 	private String brand;
 	private String name;
+	private int numberOfSales = 0;
 	private BigDecimal unitPrice;
+	private BigDecimal vat;
+	private BigDecimal vatInclusivePrice = new BigDecimal("0");
 	private BigDecimal discount = new BigDecimal("0");
 
-	public Product(String brand, String name, BigDecimal unitPrice, BigDecimal discount) {
+	public Product(String brand, String name, BigDecimal unitPrice, BigDecimal discount, BigDecimal vat) {
 		ID = "Product#" + ++count;
 		this.brand = brand;
 		this.name = name;
 		this.unitPrice = unitPrice;
 		this.discount = discount;
+		this.vat = vat;
 	}
 
 	public String getID() {
@@ -53,17 +58,26 @@ public class Product
 		return(discount);
 	}
 
-	public BigDecimal getDiscountedPrice() {
-		BigDecimal d = unitPrice.multiply(discount.divide(new BigDecimal("100")));
-		return(unitPrice.subtract(d));
+	public void addSaleCount(int i) {
+		numberOfSales += i;
+	}
+
+	public BigDecimal getVatInclusivePrice() {
+		//TOTAL PRICE = PRICE*(1 + (VAT%/100))
+		BigDecimal hundred = new BigDecimal("100");
+		BigDecimal one = new BigDecimal("1");
+		hundred = vat.divide(hundred);
+		one =  hundred.add(one);
+		vatInclusivePrice = unitPrice.multiply(one);
+		return(vatInclusivePrice);
 	}
 
 	public String getDetails() {
 		StringBuilder sb = new StringBuilder(ID + "~" + brand);
 		sb.append("~" + name);
-		sb.append("~" + unitPrice);
-		sb.append("~" + discount);
-		sb.append("~" + getDiscountedPrice());
+		sb.append("~" + unitPrice.toString());
+		sb.append("~" + discount.toString());
+		sb.append("~" + getVatInclusivePrice());
 		sb.append("~" + count);
 		return(sb.toString());
 	}

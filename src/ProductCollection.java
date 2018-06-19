@@ -4,19 +4,18 @@ import java.math.BigDecimal;
 
 public class ProductCollection
 {
-	private static ProductCollection _pc;
+	private static ProductCollection _instance;
 	private HashMap<String, Product> products = null;
-	private ArrayList<Product> arryListOfProducts = null;
 
 	public ProductCollection() {
 		products = new HashMap<String, Product>();
 	}
 
 	public static ProductCollection createInstance() {
-		if(_pc == null) {
-			_pc = new ProductCollection();
+		if(_instance == null) {
+			_instance = new ProductCollection();
 		}
-		return(_pc);
+		return(_instance);
 	}
 
 	public void  addProduct(Product p) {
@@ -44,19 +43,14 @@ public class ProductCollection
 	}
 
 	public ArrayList<Product> getArrayListOfProducts() {
-		if(arryListOfProducts == null) {
-			arryListOfProducts = new ArrayList<Product>(products.values());
-		}
-		return(arryListOfProducts);
+		return(new ArrayList<Product>(products.values()));
 	}
 
-	public ArrayList<Product> searchByPriceRange(String floorPrice, String ceilingPrice) {
-		double sr = Double.valueOf(floorPrice);
-		double er = Double.valueOf(ceilingPrice);
+	public ArrayList<Product> searchByPriceRange(double floorPrice, double ceilingPrice) {
 		ArrayList<Product> ap = new ArrayList<Product>();
 		for(Product c : getArrayListOfProducts()) {
 			double p = c.getunitPrice().doubleValue();
-			if(p >= sr && p <= er ) {
+			if(p >= floorPrice && p <= ceilingPrice ) {
 				ap.add(c);
 			}
 		}

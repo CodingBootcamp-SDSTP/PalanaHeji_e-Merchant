@@ -3,11 +3,43 @@
 	<display-name>Merchant</display-name>
 	<description>E-Commerce Website</description>
 	<servlet>
-		<servlet-name>Homepage</servlet-name>
-		<servlet-class>HomeServlet</servlet-class>
+		<servlet-name>All Products</servlet-name>
+		<servlet-class>AllProductServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Homepage</servlet-name>
-		<url-pattern>/hello</url-pattern>
+		<servlet-name>All Products</servlet-name>
+		<url-pattern>/products/</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Search In Products</servlet-name>
+		<servlet-class>SearchContentInProducts</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Search In Products</servlet-name>
+		<url-pattern>/products/search</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Search Product By ID</servlet-name>
+		<servlet-class>SearchProductByID</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Search Product By ID</servlet-name>
+		<url-pattern>/products/search-id</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Search Product By Brand</servlet-name>
+		<servlet-class>SearchProductByBrand</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Search Product By Brand</servlet-name>
+		<url-pattern>/products/search-brand</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Search Product By Price Range</servlet-name>
+		<servlet-class>SearchProductByPriceRangeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Search Product By Price Range</servlet-name>
+		<url-pattern>/products/search-price-range</url-pattern>
 	</servlet-mapping>
 </web-app>

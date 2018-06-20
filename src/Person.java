@@ -2,7 +2,7 @@ public class Person implements DetailProvider
 {
 	private String firstName;
 	private String lastName;
-	private int age;
+	private String birthDate;
 
 	public void setFirstName(String fn) {
 		firstName = fn;
@@ -20,12 +20,12 @@ public class Person implements DetailProvider
 		return(lastName);
 	}
 
-	public void setAge(int a) {
-		age = a;
+	public void birthDate(String a) {
+		birthDate = a;
 	}
 
-	public int getAge() {
-		return(age);
+	public int birthDate() {
+		return(birthDate);
 	}
 
 	public String getDetails() {

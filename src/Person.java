@@ -20,7 +20,7 @@ public class Person implements DetailProvider
 		return(lastName);
 	}
 
-	public void birthDate(String a) {
+	public void setbirthDate(String a) {
 		birthDate = a;
 	}
 

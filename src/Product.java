@@ -3,23 +3,23 @@ import java.math.MathContext;
 
 public class Product implements DetailProvider
 {
-	private static int count = 0;
 	private final String ID;
 	private String brand;
 	private String name;
 	private int numberOfSales = 0;
 	private BigDecimal unitPrice;
 	private BigDecimal vat;
+	private BigDecimal discount;
 	private BigDecimal vatInclusivePrice = new BigDecimal("0");
-	private BigDecimal discount = new BigDecimal("0");
 
-	public Product(String brand, String name, BigDecimal unitPrice, BigDecimal discount, BigDecimal vat) {
-		ID = "Product#" + ++count;
+	public Product(String id, String brand, String name, String unitPrice, String discount, String vat , int sales) {
+		ID = id;
 		this.brand = brand;
 		this.name = name;
-		this.unitPrice = unitPrice;
-		this.discount = discount;
-		this.vat = vat;
+		numberOfSales= sales;
+		unitPrice = new BigDecimal(unitPrice);
+		discount = new BigDecimal(discount);
+		vat = new BigDecimal(vat);
 	}
 
 	public String getID() {
@@ -58,8 +58,12 @@ public class Product implements DetailProvider
 		return(discount);
 	}
 
-	public void addSaleCount(int i) {
+	public void addNumberOfSales(int i) {
 		numberOfSales += i;
+	}
+
+	public int getNumberOfSales() {
+		rteurn(numberOfSales);
 	}
 
 	public BigDecimal getVatInclusivePrice() {

@@ -1,10 +1,5 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.math.BigDecimal;
-
 public class Client extends Person
 {
-	private static int count = 0;
 	private final String ID;
 	private String email;
 	private String password;
@@ -17,10 +12,11 @@ public class Client extends Person
 	private String address;
 	private Cart cart;
 
-	public Client(String fn, String ln, int a) {
+	public Client(String id, String fn, String ln, String bd) {
+		ID = id;
 		setFirstName(fn);
 		setLastName(ln);
-		setAge(a);
+		setBirthDate(bd);
 		email = "";
 		companyName = "";
 		city = "";
@@ -29,13 +25,13 @@ public class Client extends Person
 		country = "";
 		address = "";
 		invoiceID = "";
-		ID = "ClientID#" + ++count;
 		cart = new Cart();
 	}
 
-	public Client(String firstName, String lastName, int age, String email,
+	public Client(String id, String firstName, String lastName, int age, String email,
 	String password, String companyName, String city, String state,
 	String zipcode, String country, String address) {
+		ID = id;
 		setFirstName(firstName);
 		setLastName(lastName);
 		setAge(age);
@@ -48,7 +44,6 @@ public class Client extends Person
 		this.country = country;
 		this.address = address;
 		invoiceID = "";
-		ID = "ClientID#" + ++count;
 		cart = new Cart();
 	}
 

@@ -10,6 +10,7 @@ public class Client extends Person
 	private String zipcode;
 	private String country;
 	private String address;
+	private String contact;
 	private Cart cart;
 
 	public Client(String id, String fn, String ln, String bd) {
@@ -24,17 +25,18 @@ public class Client extends Person
 		zipcode =  "";
 		country = "";
 		address = "";
+		contact = "";
 		invoiceID = "";
 		cart = new Cart();
 	}
 
-	public Client(String id, String firstName, String lastName, int age, String email,
+	public Client(String id, String firstName, String lastName, String bd, String email,
 	String password, String companyName, String city, String state,
-	String zipcode, String country, String address) {
+	String zipcode, String country, String address, String contact) {
 		ID = id;
 		setFirstName(firstName);
 		setLastName(lastName);
-		setAge(age);
+		setBirthDate(bd);
 		setEmail(email);
 		this.password = password;
 		this.companyName = companyName;
@@ -43,6 +45,7 @@ public class Client extends Person
 		this.zipcode =  zipcode;
 		this.country = country;
 		this.address = address;
+		this.contact = contact;
 		invoiceID = "";
 		cart = new Cart();
 	}
@@ -123,6 +126,14 @@ public class Client extends Person
 		return(address);
 	}
 
+	public String setContact(String c) {
+		contact = c;
+	}
+
+	public String getContact() {
+		return(contact);
+	}
+
 	public Cart getCart() {
 		return(cart);
 	}
@@ -132,6 +143,7 @@ public class Client extends Person
 		StringBuilder sb = new StringBuilder(super.getDetails());
 		sb.append("~" + ID);
 		sb.append("~" + email);
+		sb.append("~" + contact);
 		sb.append("~" + companyName);
 		sb.append("~" + invoiceID);
 		sb.append("~" + city);

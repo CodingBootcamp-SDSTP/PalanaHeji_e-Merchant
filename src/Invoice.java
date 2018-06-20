@@ -3,7 +3,7 @@ import java.util.Date;
 
 public class Invoice implements DetailProvider
 {
-	private static int count =0;
+	private static int count = 0;
 	private final String ID;
 	private String customerID;
 	private final String transcationDate;
@@ -114,18 +114,18 @@ public class Invoice implements DetailProvider
 	}
 
 	public String getDetails() {
-		StringBuilder sb = new StringBuilder("INVOICE ID : " + ID);
-			sb.append("\nfrom invoice CLIENT ID : " + customerID);
-			sb.append("\nDATE PURCHASED : " + transcationDate);
-			sb.append("\nDATE PAID : " + dateOfPayment);
-			sb.append("\nCITY : " + destinationCity);
-			sb.append("\nSTATE : " + destinationState);
-			sb.append("\nZIPCODE : " + destinationZipcode);
-			sb.append("\nCOUNTRY : " + destinationCountry);
-			sb.append("\nADDRESS : " + destinationAddress);
-			sb.append("\nORDERS : " + cartDetails);
-			sb.append("\nSHIPPING COST : " + shippingCost.toString());
-			sb.append("\nTOTAL BILL : " + totalBill.toString());
+		StringBuilder sb = new StringBuilder(ID);
+			sb.append("~" + customerID);
+			sb.append("~" + transcationDate);
+			sb.append("~" + dateOfPayment);
+			sb.append("~" + destinationCity);
+			sb.append("~" + destinationState);
+			sb.append("~" + destinationZipcode);
+			sb.append("~" + destinationCountry);
+			sb.append("~" + destinationAddress);
+			sb.append("~" + cartDetails);
+			sb.append("~" + shippingCost.toString());
+			sb.append("~" + totalBill.toString());
 		return(sb.toString());
 	}
 }

@@ -49,7 +49,7 @@ public class ProductCollection
 	public ArrayList<Product> searchByPriceRange(double floorPrice, double ceilingPrice) {
 		ArrayList<Product> ap = new ArrayList<Product>();
 		for(Product c : getArrayListOfProducts()) {
-			double p = c.getunitPrice().doubleValue();
+			double p = c.getUnitPrice().doubleValue();
 			if(p >= floorPrice && p <= ceilingPrice ) {
 				ap.add(c);
 			}

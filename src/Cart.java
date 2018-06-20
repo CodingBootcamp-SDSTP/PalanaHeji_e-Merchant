@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class Cart implements DetailProvider
 {
@@ -91,12 +90,12 @@ public class Cart implements DetailProvider
 	public String getDetails() {
 		StringBuilder sb = new StringBuilder();
 		for(Product  p  : cart) {
-			sb.append("\nPRODUCT ID: " + p.getID());
-			sb.append("\nBRAND : " + p.getBrand());
-			sb.append("\nNAME : " + p.getName());
-			sb.append("\nUNIT PRICE : " + p.getunitPrice());
-			sb.append("\nDISCOUNT : " + p.getDiscount());
-			sb.append("\nVAT INCLUSIVE PRICE : " + p.getVatInclusivePrice());
+			sb.append("~" + p.getID());
+			sb.append("~" + p.getBrand());
+			sb.append("~" + p.getName());
+			sb.append("~" + p.getUnitPrice());
+			sb.append("~" + p.getDiscount());
+			sb.append("~" + p.getVatInclusivePrice());
 		}
 		return(sb.toString());
 	}

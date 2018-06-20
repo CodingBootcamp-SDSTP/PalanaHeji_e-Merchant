@@ -12,14 +12,14 @@ public class Product implements DetailProvider
 	private BigDecimal discount;
 	private BigDecimal vatInclusivePrice = new BigDecimal("0");
 
-	public Product(String id, String brand, String name, String unitPrice, String discount, String vat , int sales) {
+	public Product(String id, String brand, String name, String up, String d, String v , int sales) {
 		ID = id;
 		this.brand = brand;
 		this.name = name;
 		numberOfSales= sales;
-		unitPrice = new BigDecimal(unitPrice);
-		discount = new BigDecimal(discount);
-		vat = new BigDecimal(vat);
+		unitPrice = new BigDecimal(up);
+		discount = new BigDecimal(d);
+		vat = new BigDecimal(v);
 	}
 
 	public String getID() {
@@ -50,7 +50,7 @@ public class Product implements DetailProvider
 		return(name);
 	}
 
-	public BigDecimal getunitPrice() {
+	public BigDecimal getUnitPrice() {
 		return(unitPrice);
 	}
 
@@ -63,7 +63,7 @@ public class Product implements DetailProvider
 	}
 
 	public int getNumberOfSales() {
-		rteurn(numberOfSales);
+		return(numberOfSales);
 	}
 
 	public BigDecimal getVatInclusivePrice() {
@@ -77,12 +77,13 @@ public class Product implements DetailProvider
 	}
 
 	public String getDetails() {
-		StringBuilder sb = new StringBuilder(ID + "~" + brand);
+		StringBuilder sb = new StringBuilder(ID);
+		sb.append("~" + brand);
 		sb.append("~" + name);
 		sb.append("~" + unitPrice.toString());
 		sb.append("~" + discount.toString());
+		sb.append("~" + numberOfSales);
 		sb.append("~" + getVatInclusivePrice());
-		sb.append("~" + count);
 		return(sb.toString());
 	}
 }

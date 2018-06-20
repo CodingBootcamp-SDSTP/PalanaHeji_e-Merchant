@@ -24,11 +24,11 @@ public class Person implements DetailProvider
 		birthDate = a;
 	}
 
-	public int getBirthDate() {
+	public String getBirthDate() {
 		return(birthDate);
 	}
 
 	public String getDetails() {
-		return(firstName + "~" + lastName + "~" + age);
+		return(firstName + "~" + lastName + "~" + birthDate);
 	}
 }

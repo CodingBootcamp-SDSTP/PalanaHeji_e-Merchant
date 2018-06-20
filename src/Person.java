@@ -20,11 +20,11 @@ public class Person implements DetailProvider
 		return(lastName);
 	}
 
-	public void setbirthDate(String a) {
+	public void setBirthDate(String a) {
 		birthDate = a;
 	}
 
-	public int birthDate() {
+	public int getBirthDate() {
 		return(birthDate);
 	}
 

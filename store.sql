@@ -59,15 +59,10 @@ CREATE TABLE invoices (
 	cartid INTEGER,
 	transactionDate varchar(30),
 	dateOfPayment varchar(30),
-	destinationCity varchar(30),
-	destinationState varchar(30),
-	destinationZipcode varchar(30),
-	destinationCountry varchar(30),
-	destinationAddress varchar(30),
+	destinationAddress varchar(100),
 	shippingCost varchar(20),
 	totalBill varchar(20),
 	status varchar(30),
 	FOREIGN KEY (cartid) REFERENCES carts (id),
 	PRIMARY KEY(id)
 )ENGINE INNODB;
-

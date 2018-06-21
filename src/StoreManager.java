@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 import java.sql.*;
-import java.lang.ClassLoader;
-import javax.servlet.*;
-import javax.servlet.http.*;
 
 public class StoreManager
 {
@@ -10,6 +7,7 @@ public class StoreManager
 	private ProductCollection productCollection = null;
 	private ClientCollection clientCollection = null;
 	private InvoiceCollection invoiceCollection = null;
+	private Connection conn;
 
 	private StoreManager() {
 		productCollection = ProductCollection.createInstance();
@@ -17,7 +15,7 @@ public class StoreManager
 		invoiceCollection = InvoiceCollection.createInstance();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn = DriverManager.getConnection(
+				conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost/eshopdb?user=eshopdb&password=eshopdb" +
 					"&serverTimezone=UTC&useSSL=false");
 			readFromDB(conn);
@@ -62,9 +60,10 @@ public class StoreManager
 		System.out.println("StoreManager connected to DB");
 		Statement stmt = null;
 		ResultSet rs = null;
+		ResultSet rsForInv = null;
 		try {
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM clients");
+			rs = stmt.executeQuery("SELECT * FROM clients;");
 			while(rs.next()) {
 				String[] details = {
 					rs.getString("clientid"),
@@ -84,7 +83,7 @@ public class StoreManager
 				};
 				createObject(details);
 			}
-			rs = stmt.executeQuery("SELECT * FROM products");
+			rs = stmt.executeQuery("SELECT * FROM products;");
 			while(rs.next()) {
 				String[] details = {
 					rs.getString("productid"),
@@ -95,6 +94,41 @@ public class StoreManager
 					rs.getString("vat"),
 					rs.getString("numberOfSales"),
 					"product"
+				};
+				createObject(details);
+			}
+			String cartDetails = "SELECT firstname, lastname, email, state," +
+			"zipcode, country, address, name , quantity, vatInclusivePrice FROM" +
+			"orders,clients, products WHERE orders.clientid=clients.id AND orders.productid=products.id;";
+			rsForInv = stmt.executeQuery(cartDetails);
+			StringBuilder sb = new StringBuilder();
+			while(rs.next()) {
+				sb.append(rsForInv.getString("firstname"));
+				sb.append(rsForInv.getString("lastname"));
+				sb.append(rsForInv.getString("email"));
+				sb.append(rsForInv.getString("state"));
+				sb.append(rsForInv.getString("zipcode"));
+				sb.append(rsForInv.getString("country"));
+				sb.append(rsForInv.getString("address"));
+				sb.append(rsForInv.getString("name"));
+				sb.append(rsForInv.getString("quantity"));
+				sb.append(rsForInv.getString("vatInclusivePrice"));
+			}
+			rs = stmt.executeQuery("SELECT * FROM invoices;");
+			while(rs.next()) {
+				String[] details = {
+					rs.getString("invoiceid"),
+					rs.getString("clientid"),
+					rs.getString("cartid"),
+					rs.getString("transactionDate"),
+					rs.getString("dateOfPayment"),
+					rs.getString("destinationCity"),
+					rs.getString("destinationState"),
+					rs.getString(sb.toString()),
+					rs.getString("destinationZipcode"),
+					rs.getString("totalBill"),
+					rs.getString("status"),
+					"invoice"
 				};
 				createObject(details);
 			}
@@ -134,12 +168,72 @@ public class StoreManager
 				clientCollection.addClient(c);
 				break;
 			case "product":
-				Product p = new Product(details[0], details[2], details[1],
-				details[3], details[4], details[5], Integer.parseInt(details[6]));
+				Product p = new Product(details[0],
+				details[2],
+				details[1],
+				details[3],
+				details[4],
+				details[5],
+				Integer.parseInt(details[6])
+				);
 				productCollection.addProduct(p);
 				break;
+			case "invoice":
+				Invoice i = new Invoice(
+					details[0],
+					details[2],
+					details[1],
+					details[3],
+					details[4],
+					details[5],
+					details[6],
+					details[7],
+					details[8],
+					details[9],
+					details[10]
+					);
+				invoiceCollection.addInvoice(i);
+				break;
 		}
-		
+	}
+
+	public boolean addProduct(ArrayList<String> prodDetails) {
+		try {
+			//CHECK FIRST IF PRODUCTID IS ALREADY EXISTS IN DATABASE
+			PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO products (productid, name, brand, unitPrice, discount," +
+				"vat, numberOfSales, vatInclusivePrice) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+				int i = 0;
+				for(String d : prodDetails) {
+					stmt.setString(++i, d);
+				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+
+	public boolean addClient(ArrayList<String> clientDetails) {
+		try {
+			//CHECK FIRST IF PRODUCTID IS ALREADY EXISTS IN DATABASE
+			PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO clients (clientid, firstname, lastname, birthdate," +
+				"email, password, companyname, city, state, zipcode, country," +
+				"address, contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				int i = 0;
+				for(String d : clientDetails) {
+					stmt.setString(++i, d);
+				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
 	}
 
 	public ArrayList<Object> search(String s) {

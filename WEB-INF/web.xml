@@ -12,7 +12,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Search In Products</servlet-name>
-		<servlet-class>SearchContentInProducts</servlet-class>
+		<servlet-class>SearchContentInProductsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Search In Products</servlet-name>
@@ -20,7 +20,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Search Product By ID</servlet-name>
-		<servlet-class>SearchProductByID</servlet-class>
+		<servlet-class>SearchProductByIDServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Search Product By ID</servlet-name>
@@ -28,7 +28,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Search Product By Brand</servlet-name>
-		<servlet-class>SearchProductByBrand</servlet-class>
+		<servlet-class>SearchProductByBrandServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Search Product By Brand</servlet-name>
@@ -41,5 +41,45 @@
 	<servlet-mapping>
 		<servlet-name>Search Product By Price Range</servlet-name>
 		<url-pattern>/products/search-price-range</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>All Clients</servlet-name>
+		<servlet-class>AllClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>All Clients</servlet-name>
+		<url-pattern>/clients/</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Serach Client By ID Clients</servlet-name>
+		<servlet-class>SearchClientByIDServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Serach Client By ID Clients</servlet-name>
+		<url-pattern>/clients/search-id</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Add Product To Database</servlet-name>
+		<servlet-class>AddProductServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Add Product To Database</servlet-name>
+		<url-pattern>/products/add</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Add Client To Database</servlet-name>
+		<servlet-class>AddClientServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Add Client To Database</servlet-name>
+		<url-pattern>/clients/add</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>All Invoices</servlet-name>
+		<servlet-class>AllInvoiceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>All Invoices</servlet-name>
+		<url-pattern>/invoices/</url-pattern>
 	</servlet-mapping>
 </web-app>

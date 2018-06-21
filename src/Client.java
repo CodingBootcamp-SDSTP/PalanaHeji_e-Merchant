@@ -126,7 +126,7 @@ public class Client extends Person
 		return(address);
 	}
 
-	public String setContact(String c) {
+	public void setContact(String c) {
 		contact = c;
 	}
 

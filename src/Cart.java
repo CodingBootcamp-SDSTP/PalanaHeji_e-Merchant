@@ -79,10 +79,10 @@ public class Cart implements DetailProvider
 		return(totalAmount);
 	}
 
-	public Invoice createInvoice(Client c, String date) {
+	public Invoice createInvoice(String invoiceId, Client c, String date) {
 		Invoice invoice = null;
 		if(isCartPaid) {
-			invoice = new Invoice(c, date);
+			invoice = new Invoice(invoiceId, c, date);
 		}
 		return(invoice);
 	}

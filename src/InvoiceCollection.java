@@ -37,17 +37,17 @@ public class InvoiceCollection
 		return(invoices.size());
 	}
 
-	public HashMap<String, Invoice> getAllInvoices() {
+	public HashMap<String, Invoice> getAllInvoice() {
 		return(invoices);
 	}
 
-	public ArrayList<Invoice> getArrayListOfInvoices() {
+	public ArrayList<Invoice> getArrayListOfInvoice() {
 		return(new ArrayList<Invoice>(invoices.values()));
 	}
 
 	public ArrayList<Invoice> searchInvoice(String q) {
 		ArrayList<Invoice> ap = new ArrayList<Invoice>();
-		for(Invoice c : getArrayListOfInvoices()) {
+		for(Invoice c : getArrayListOfInvoice()) {
 			if(matches(c, q)) {
 				ap.add(c);
 			}

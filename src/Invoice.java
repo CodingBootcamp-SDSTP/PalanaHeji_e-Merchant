@@ -3,7 +3,7 @@ import java.util.Date;
 
 public class Invoice implements DetailProvider
 {
-	private static int count = 0;
+	// private static int count = 0;
 	private final String ID;
 	private String customerID;
 	private final String transcationDate;
@@ -18,9 +18,9 @@ public class Invoice implements DetailProvider
 	private BigDecimal shippingCost;
 	private boolean isPaid = false;
 
-	public Invoice(String clientId, String total, String address, String zipcode,
+	public Invoice(String id, String clientId, String total, String address, String zipcode,
 	String city, String country, String state, String cartDetails, String datePaid, String shipCost) {
-		ID = "PifabsInvoice#" + ++count;
+		ID = id;
 		customerID = clientId;
 		totalBill = new BigDecimal(total);
 		shippingCost = new BigDecimal(shipCost);
@@ -34,8 +34,8 @@ public class Invoice implements DetailProvider
 		destinationAddress = address;
 	}
 
-	public Invoice(Client c, String datePaid) {
-		ID = "PifabsInvoice#" + ++count;
+	public Invoice(String id, Client c, String datePaid) {
+		ID = id;
 		customerID = c.getID();
 		totalBill = c.getCart().getTotalBill();
 		destinationAddress = c.getAddress();

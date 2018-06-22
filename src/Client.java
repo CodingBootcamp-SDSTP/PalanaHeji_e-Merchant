@@ -28,6 +28,7 @@ public class Client extends Person
 		contact = "";
 		invoiceID = "";
 		cart = new Cart();
+		StoreManager.addCart(cart.getID());
 	}
 
 	public Client(String id, String firstName, String lastName, String bd, String email,
@@ -48,6 +49,7 @@ public class Client extends Person
 		this.contact = contact;
 		invoiceID = "";
 		cart = new Cart();
+		StoreManager.addCart(cart.getID());
 	}
 
 	public String getID() {

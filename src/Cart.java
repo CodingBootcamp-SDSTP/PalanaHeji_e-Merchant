@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class Cart implements DetailProvider
 {
-	private int count = 0;
+	private static int count = 0;
 	private static String ID;
 	private ArrayList<Product> cart;
 	private BigDecimal totalAmount;
@@ -12,7 +12,8 @@ public class Cart implements DetailProvider
 	private boolean isCartPaid = false;
 
 	public Cart() {
-		ID = "Cart#" + ++count;
+		int i = ++count;
+		ID = "CART00" + i;
 		cart = new ArrayList<Product>();
 	}
 
@@ -79,10 +80,10 @@ public class Cart implements DetailProvider
 		return(totalAmount);
 	}
 
-	public Invoice createInvoice(String invoiceId, Client c, String date) {
+	public Invoice createInvoice(String invoiceId, Client c, String date, String status) {
 		Invoice invoice = null;
 		if(isCartPaid) {
-			invoice = new Invoice(invoiceId, c, date);
+			invoice = new Invoice(invoiceId, c, date, status);
 		}
 		return(invoice);
 	}

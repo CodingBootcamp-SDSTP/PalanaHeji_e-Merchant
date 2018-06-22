@@ -3,7 +3,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 public class AddClientServlet extends HttpServlet
 {
@@ -34,7 +33,13 @@ public class AddClientServlet extends HttpServlet
 		PrintWriter out = response.getWriter();
 		System.out.println(clientDetails);
 		out.println(clientDetails);
+		Client c = new Client(clientDetails.get(0), clientDetails.get(1),
+			clientDetails.get(2), clientDetails.get(3), clientDetails.get(4),
+			clientDetails.get(5), clientDetails.get(6), clientDetails.get(7),
+			clientDetails.get(8), clientDetails.get(9), clientDetails.get(10),
+			clientDetails.get(11), clientDetails.get(12));
 		sm.addClient(clientDetails);
+		sm.getClientCollection().addClient(c);
 		clientDetails = null;
 	}
 

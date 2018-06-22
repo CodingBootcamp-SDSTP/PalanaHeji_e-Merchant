@@ -75,11 +75,27 @@
 		<url-pattern>/clients/add</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>All Invoices</servlet-name>
+		<servlet-name>All Invoice</servlet-name>
 		<servlet-class>AllInvoiceServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>All Invoices</servlet-name>
+		<servlet-name>All Invoice</servlet-name>
 		<url-pattern>/invoices/</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Add Invoice</servlet-name>
+		<servlet-class>AddInvoiceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Add Invoice</servlet-name>
+		<url-pattern>/invoices/add</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Add Order</servlet-name>
+		<servlet-class>AddOrderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Add Order</servlet-name>
+		<url-pattern>/order</url-pattern>
 	</servlet-mapping>
 </web-app>

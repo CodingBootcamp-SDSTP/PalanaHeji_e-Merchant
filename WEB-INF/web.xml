@@ -24,7 +24,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Search Product By ID</servlet-name>
-		<url-pattern>/products/search-id</url-pattern>
+		<url-pattern>/products/searchid</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Search Product By Brand</servlet-name>
@@ -51,12 +51,12 @@
 		<url-pattern>/clients/</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>Serach Client By ID Clients</servlet-name>
+		<servlet-name>Serach Client By ID</servlet-name>
 		<servlet-class>SearchClientByIDServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Serach Client By ID Clients</servlet-name>
-		<url-pattern>/clients/search-id</url-pattern>
+		<servlet-name>Serach Client By ID</servlet-name>
+		<url-pattern>/clients/search</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Add Product To Database</servlet-name>
@@ -65,6 +65,14 @@
 	<servlet-mapping>
 		<servlet-name>Add Product To Database</servlet-name>
 		<url-pattern>/products/add</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Update Product Details</servlet-name>
+		<servlet-class>UpdateProductDetailsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Update Product Details</servlet-name>
+		<url-pattern>/products/update</url-pattern>
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>Add Client To Database</servlet-name>
@@ -97,5 +105,13 @@
 	<servlet-mapping>
 		<servlet-name>Add Order</servlet-name>
 		<url-pattern>/order</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Update Order</servlet-name>
+		<servlet-class>UpdateOrderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Update Order</servlet-name>
+		<url-pattern>/order/update</url-pattern>
 	</servlet-mapping>
 </web-app>

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.sql.*;
 
 public class StoreManager
@@ -7,7 +8,7 @@ public class StoreManager
 	private ProductCollection productCollection = null;
 	private ClientCollection clientCollection = null;
 	private InvoiceCollection invoiceCollection = null;
-	private Connection conn;
+	private static Connection conn;
 
 	private StoreManager() {
 		productCollection = ProductCollection.createInstance();
@@ -61,6 +62,7 @@ public class StoreManager
 		Statement stmt = null;
 		ResultSet rs = null;
 		ResultSet rsForInv = null;
+		ResultSet persondetails = null;
 		try {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM clients;");
@@ -87,7 +89,7 @@ public class StoreManager
 			while(rs.next()) {
 				String[] details = {
 					rs.getString("productid"),
-					rs.getString("name"),
+					rs.getString("productname"),
 					rs.getString("brand"),
 					rs.getString("unitPrice"),
 					rs.getString("discount"),
@@ -97,35 +99,86 @@ public class StoreManager
 				};
 				createObject(details);
 			}
-			String cartDetails = "SELECT firstname, lastname, email, state," +
-			"zipcode, country, address, name , quantity, vatInclusivePrice FROM" +
-			"orders,clients, products WHERE orders.clientid=clients.id AND orders.productid=products.id;";
+			String cartDetails = "SELECT carts.cartid, products.productid, productname," +
+			"brand, discount, quantity, vatInclusivePrice FROM products INNER JOIN " +
+			"orders ON orders.productid=products.id INNER JOIN carts ON orders.cartid=carts.id ORDER BY cartid;";
 			rsForInv = stmt.executeQuery(cartDetails);
-			StringBuilder sb = new StringBuilder();
-			while(rs.next()) {
-				sb.append(rsForInv.getString("firstname"));
-				sb.append(rsForInv.getString("lastname"));
-				sb.append(rsForInv.getString("email"));
-				sb.append(rsForInv.getString("state"));
-				sb.append(rsForInv.getString("zipcode"));
-				sb.append(rsForInv.getString("country"));
-				sb.append(rsForInv.getString("address"));
-				sb.append(rsForInv.getString("name"));
-				sb.append(rsForInv.getString("quantity"));
-				sb.append(rsForInv.getString("vatInclusivePrice"));
+			ArrayList<ArrayList<String>> orderDetails = new ArrayList<ArrayList<String>>();
+			while(rsForInv.next()) {
+				ArrayList<String> details = new ArrayList<String>();
+					details.add(rsForInv.getString("cartid"));
+					details.add(rsForInv.getString("productid"));
+					details.add(rsForInv.getString("productname"));
+					details.add(rsForInv.getString("brand"));
+					details.add(rsForInv.getString("quantity"));
+					details.add(rsForInv.getString("discount"));
+					details.add(rsForInv.getString("vatInclusivePrice"));
+				orderDetails.add(details);
+				details = null;
 			}
-			rs = stmt.executeQuery("SELECT * FROM invoices;");
+			String personDetailsq = "SELECT DISTINCT invoices.invoiceid, carts.cartid," +
+			"firstname, lastname, email, contact FROM clients INNER JOIN orders ON " +
+			"orders.clientid=clients.id INNER JOIN carts ON orders.cartid=carts.id " +
+			"INNER JOIN invoices ON orders.cartid=invoices.cartid";
+			persondetails = stmt.executeQuery(personDetailsq);
+			ArrayList<ArrayList<String>> clientDetails = new ArrayList<ArrayList<String>>();
+			while(persondetails.next()) {
+				ArrayList<String> details = new ArrayList<String>();
+					details.add(persondetails.getString("invoiceid"));
+					details.add(persondetails.getString("cartid"));
+					details.add(persondetails.getString("firstname"));
+					details.add(persondetails.getString("lastname"));
+					details.add(persondetails.getString("email"));
+					details.add(persondetails.getString("contact"));
+				clientDetails.add(details);
+				details = null;
+			}
+			ArrayList<String> detailsForInvoice = null;
+			HashMap<String, String> invoice = new HashMap<String, String>();
+			String cartid;
+			String orderToString;
+			String clientToString;
+			for(ArrayList<String> order : orderDetails) {
+				for(ArrayList<String> client : clientDetails) {
+					cartid = order.get(0);
+					if(cartid.equals(client.get(1))) {
+						order.remove(cartid);
+						orderToString = order.toString();
+						if(!invoice.containsKey(cartid)) {
+							invoice.put(cartid, orderToString);
+						}
+						else {
+							clientToString = client.toString();
+							invoice.put(cartid, invoice.get(cartid).concat(orderToString));
+							if(!invoice.get(cartid).contains(clientToString)) {
+								 invoice.put( cartid, invoice.get(cartid).concat(clientToString));
+							}
+							detailsForInvoice = new ArrayList<String>(invoice.values());
+						}
+					}
+				}
+			}
+			String invoiceDetailsq = "SELECT invoiceid, carts.cartid, clients.clientid, transactionDate," +
+			"dateOfPayment, destinationAddress, shippingCost, totalBill, status FROM " +
+			"clients INNER JOIN orders ON orders.clientid=clients.id INNER JOIN " +
+			"carts ON orders.cartid=carts.id INNER JOIN invoices ON orders.cartid=invoices.cartid;";
+			rs = stmt.executeQuery(invoiceDetailsq);
+			String cartd = "";
 			while(rs.next()) {
+				for(String d : detailsForInvoice) {
+					if(d.contains(rs.getString("cartid"))) {
+						cartd = d;
+					}
+				}
 				String[] details = {
 					rs.getString("invoiceid"),
 					rs.getString("clientid"),
 					rs.getString("cartid"),
 					rs.getString("transactionDate"),
 					rs.getString("dateOfPayment"),
-					rs.getString("destinationCity"),
-					rs.getString("destinationState"),
-					rs.getString(sb.toString()),
-					rs.getString("destinationZipcode"),
+					rs.getString("destinationAddress"),
+					cartd,
+					rs.getString("shippingCost"),
 					rs.getString("totalBill"),
 					rs.getString("status"),
 					"invoice"
@@ -138,60 +191,33 @@ public class StoreManager
 			return(false);
 		}
 		finally {
-			try {if(stmt != null) { stmt = null; }} catch(Exception e) { e.printStackTrace(); }
-			try {if(rs != null) { rs = null; }} catch(Exception e) { e.printStackTrace(); }
+			try { if(stmt != null) { stmt = null; } } catch(Exception e) { e.printStackTrace(); }
+			try { if(rs != null) { rs = null; } } catch(Exception e) { e.printStackTrace(); }
+			try { if(rsForInv != null) { rsForInv = null; } } catch(Exception e) { e.printStackTrace(); }
+			try { if(persondetails != null) { persondetails = null; } } catch(Exception e) { e.printStackTrace(); }
 		}
 		return(true);
 	}
 
 	public void createObject(String[] details) {
-		System.out.println(details);
 		int len = details.length-1;
 		String d = details[len];
 		switch(d) {
 			case "client":
-				Client c = new Client(
-					details[0],
-					details[1],
-					details[2],
-					details[3],
-					details[4],
-					details[5],
-					details[6],
-					details[7],
-					details[8],
-					details[9],
-					details[10],
-					details[11],
-					details[12]
-					);
+				Client c = new Client(details[0], details[1], details[2], details[3],
+					details[4], details[5], details[6], details[7], details[8],
+					details[9], details[10], details[11], details[12]);
 				clientCollection.addClient(c);
 				break;
 			case "product":
-				Product p = new Product(details[0],
-				details[2],
-				details[1],
-				details[3],
-				details[4],
-				details[5],
-				Integer.parseInt(details[6])
-				);
+				Product p = new Product(details[0], details[2], details[1], details[3],
+				details[4], details[5], Integer.parseInt(details[6]));
 				productCollection.addProduct(p);
 				break;
 			case "invoice":
-				Invoice i = new Invoice(
-					details[0],
-					details[2],
-					details[1],
-					details[3],
-					details[4],
-					details[5],
-					details[6],
-					details[7],
-					details[8],
-					details[9],
-					details[10]
-					);
+				Invoice i = new Invoice(details[0], details[1], details[2], details[3],
+					details[4], details[5], details[6], details[7], details[8],
+					details[9]);
 				invoiceCollection.addInvoice(i);
 				break;
 		}
@@ -199,7 +225,6 @@ public class StoreManager
 
 	public boolean addProduct(ArrayList<String> prodDetails) {
 		try {
-			//CHECK FIRST IF PRODUCTID IS ALREADY EXISTS IN DATABASE
 			PreparedStatement stmt = conn.prepareStatement(
 				"INSERT INTO products (productid, name, brand, unitPrice, discount," +
 				"vat, numberOfSales, vatInclusivePrice) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
@@ -216,9 +241,26 @@ public class StoreManager
 		return(true);
 	}
 
+	public boolean updateProductDetails(ArrayList<String> prodDetails) {
+		try {
+			PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE products set productid = ?, productname = ?, brand = ?," +
+				"numberOfSales = ?, unitPrice = ?, discount = ?, vat = ?, vatInclusivePrice = ? where id = ?;");
+				int i = 0;
+				for(String d : prodDetails) {
+					stmt.setString(++i, d);
+				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+
 	public boolean addClient(ArrayList<String> clientDetails) {
 		try {
-			//CHECK FIRST IF PRODUCTID IS ALREADY EXISTS IN DATABASE
 			PreparedStatement stmt = conn.prepareStatement(
 				"INSERT INTO clients (clientid, firstname, lastname, birthdate," +
 				"email, password, companyname, city, state, zipcode, country," +
@@ -227,6 +269,72 @@ public class StoreManager
 				for(String d : clientDetails) {
 					stmt.setString(++i, d);
 				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+
+	public boolean addInvoice(ArrayList<String> invoiceDetails) {
+		try {
+			PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO invoices (invoiceid, cartid, transactionDate, dateOfPayment," +
+				"destinationAddress, shippingCost, totalBill) VALUES (?, ?, ?, ?, ?, ?, ?);");
+				int i = 0;
+				for(String d : invoiceDetails) {
+					stmt.setString(++i, d);
+				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+
+	public boolean addOrder(ArrayList<String> orderDetails) {
+		try {
+			PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO orders (clientid, productid, cartid, quantity) VALUES (?, ?, ?, ?);");
+				int i = 0;
+				for(String d : orderDetails) {
+					stmt.setString(++i, d);
+				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+
+	public boolean updateOrder(ArrayList<String> orderDetails) {
+		try {
+			PreparedStatement stmt = conn.prepareStatement(
+				"UPDATE orders set productid = ?, quantity = ? WHERE id = ?;");
+				int i = 0;
+				for(String d : orderDetails) {
+					stmt.setString(++i, d);
+				}
+				stmt.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
+
+	public static boolean addCart(String cartID) {
+		try {
+			PreparedStatement stmt = conn.prepareStatement(
+				"INSERT INTO carts (cartid) VALUES (?);");
+				stmt.setString(1, cartID);
 				stmt.executeUpdate();
 		}
 		catch(Exception e) {
